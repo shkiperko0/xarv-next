@@ -1,5 +1,4 @@
-
-
+import { IPoint, IRect } from "./types"
 
 export type callback<Type> = () => Type
 
@@ -77,3 +76,11 @@ export function setCookie(name: string, value: string, date: Date, path: string 
 }
 
 export const clearCookie = (name: string) => setCookie(name, '', new Date(1))
+
+
+export function MakePointInRect(point: IPoint, rect: IRect){
+    return { 
+        x: ((point.x < rect.left) ? rect.left : (point.x > rect.right ) ? rect.right : point.x),
+        y: ((point.y < rect.top) ? rect.top : (point.y > rect.bottom) ? rect.bottom : point.y),
+    }
+}

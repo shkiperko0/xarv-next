@@ -1,0 +1,34 @@
+
+
+.script{
+    position: relative;
+
+    height: 1000px;
+    width: 1000px;
+}
+
+.node{
+    position: absolute;
+
+    cursor: pointer;
+
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: red;
+    padding: 5px;
+}
+
+.connection{
+    position: absolute;
+    pointer-events: none;
+    overflow: visible !important;
+}
+
+.connection-path {
+    stroke: #4ea9ff;
+    stroke-width: 3px;
+}
+
+.connection-line{
+    overflow: visible !important;
+}
