@@ -95,9 +95,34 @@ export interface INodeInput<ValueType=any>{
     node: IScriptNode
 }
 
+// // also node
+// export interface IScriptNode{
+    
+
+
+//     display: any
+
+//     id: number
+//     title: string
+//     script: IScript
+
+//     io: INodeInput[]
+
+//     next?: IScriptNode
+//     Exec(state: ScriptState): ScriptState 
+//     Route(): IScriptNode | undefined
+
+//     Editor?(props: { node: IScriptNode }): JSX.Element
+// }
+
 export type IScriptNode = CScriptNode
 
-export interface DisplaySettings_ScriptNode{
+export interface CScriptNode_Constructor {
+    Editor?(props: { node: IScriptNode }): JSX.Element
+    description?: string
+}
+
+export interface CScriptNode_DisplaySettings{
     posX: number
     posY: number
 }
@@ -106,7 +131,7 @@ export class CScriptNode {
     static Editor?(props: { node: IScriptNode }): JSX.Element
     static description?: string
 
-    display?: DisplaySettings_ScriptNode
+    display?: CScriptNode_DisplaySettings
 
     id: number
     title: string
@@ -180,5 +205,34 @@ export class CTestNodeField extends CScriptNode {
 }
 
 
+export class CMathNode_Multiplication extends CFunctionNode {
+    constructor(script: IScript){
+        super(script, (state, node) => {
+            return { ...state, value: state.value * node.value }
+        })
+    }
+}
 
+export class CMathNode_Subtraction extends CFunctionNode {
+    constructor(script: IScript){
+        super(script, (state, node) => {
+            return { ...state, value: state.value - node.value }
+        })
+    }
+}
 
+export class CMathNode_Division extends CFunctionNode {
+    constructor(script: IScript){
+        super(script, (state, node) => {
+            return { ...state, value: state.value / node.value }
+        })
+    }
+}
+
+export class CMathNode_Addition extends CFunctionNode {
+    constructor(script: IScript){
+        super(script, (state, node) => {
+            return { ...state, value: state.value + node.value }
+        })
+    }
+}

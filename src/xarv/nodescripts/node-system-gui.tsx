@@ -1,6 +1,6 @@
 
 import { createEventer, useEventer } from 'xarv/eventer/eventer'
-import { IScript, IConnection, IScriptNode, ScriptState, CTestNodeField, CFunctionNode, CTestNode, DisplaySettings_ScriptNode, CScriptNode } from './node-system'
+import { IScript, IConnection, IScriptNode, ScriptState, CTestNodeField, CFunctionNode, CTestNode, CScriptNode, CScriptNode_DisplaySettings } from './node-system'
 import style from './node-system-gui.module.scss'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
 import { useDragMovement, useHtmlElementEvent } from 'xarv/tools/hooks'
@@ -23,7 +23,7 @@ interface DisplaySettings_Script{
 
 type CildrenProps = { children?: ReactNode }
 
-type NodeConstructor = (script: IScript, display: DisplaySettings_ScriptNode) => IScriptNode
+type NodeConstructor = (script: IScript, display: CScriptNode_DisplaySettings) => IScriptNode
 type INodePallete = NodeConstructor[]
 
 const nodePallete: INodePallete = [
@@ -116,7 +116,7 @@ export const GUI_ConnectionPoint = (props: {
 
 export const GUI_ScriptNode = (props: { node: IScriptNode }) => {
     const { node } = props
-    const { posX, posY, ...other } = node.display as DisplaySettings_ScriptNode ?? {}
+    const { posX, posY, ...other } = node.display ?? {}
     const ref = useRef<HTMLDivElement | null>(null)
     const [ selected, setSelected ] = useState(false)
     const { Editor } = node.constructor as any
@@ -158,25 +158,28 @@ export const GUI_ScriptNode = (props: { node: IScriptNode }) => {
 export const GUI_Connection = (props: { connection: IConnection }) => {
     const { connection: { from: a, to: b  } } = props
     const [ state, setState ] = useState({ 
-        di_a: a.display as DisplaySettings_ScriptNode ?? {},
-        di_b: b.display as DisplaySettings_ScriptNode ?? {}
+        di_a: a.display,
+        di_b: b.display
     })
     const { di_a, di_b } = state
 
     useEventer(we, 'onNodeMove', node => {
         if(node == a || node == b){
             setState({ 
-                di_a: a.display as DisplaySettings_ScriptNode ?? {},
-                di_b: b.display as DisplaySettings_ScriptNode ?? {}
+                di_a: a.display,
+                di_b: b.display
             })
         }
     })
 
-    return <div className={cl(style.connection)}>
-        <svg className={cl(style['connection-line'])}>
-            <path className={cl(style['connection-path'])} d={`M ${di_a.posX} ${di_a.posY} ${di_b.posX} ${di_b.posY}`}/>
-        </svg>
-    </div>
+    return <>{
+        (di_a && di_b) &&
+        <div className={cl(style.connection)}>
+            <svg className={cl(style['connection-line'])}>
+                <path className={cl(style['connection-path'])} d={`M ${di_a.posX} ${di_a.posY} ${di_b.posX} ${di_b.posY}`}/>
+            </svg>
+        </div>
+    }</>
 }
 
 interface StateProps<StateType>{
