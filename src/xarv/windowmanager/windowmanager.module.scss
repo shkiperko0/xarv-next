@@ -1,0 +1,148 @@
+
+
+.node{
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.node > *:not(:last-child) {
+    border-bottom: 1px solid black;
+}
+
+.node_caption{
+    font-size: 110%;
+    padding: 10px;
+}
+
+.node_body{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+
+.blueprint{
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.blueprint_caption{
+    font-size: 120%;
+}
+
+.blueprint_body{
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    
+    width: 100%;
+    height: 100%;
+}
+
+.testing_menu{
+    font-size: 120%;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dragable {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+}
+
+.dragpoint{
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.window {
+    position: absolute;
+    pointer-events: all;
+    overflow: hidden;
+  }
+  
+  .windowheader {
+    padding: 10px;
+    background-color: rgb(67, 63, 71);
+  }
+  
+  .tasks {
+    pointer-events: all;
+  }
+  
+  .windowcontent {
+    height: 100%;
+  }
+  
+  .windows {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    pointer-events: none;
+  
+    z-index: var(--z--windows);
+    overflow: hidden;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .window {
+    background-color: white;
+    box-shadow: 0 0 10px -1px black;
+  }
+  
+  .window:hover {
+    box-shadow: 0 0 5px 2px red;
+  }
+  
+  .close_button {
+    display: block
+  }
+
+  .fullScreen_button {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+    background-color: rgba(248, 249, 250, 0);
+    border: none;
+  }
+  .minimize_button {
+    background-color: rgba(248, 249, 250, 0);
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+  }
+  
+  .close_button:hover {
+    background-color: #ef4444;
+    color: #fef2f2;
+  }
+  .fullScreen_button:hover {
+    background-color: rgba(248, 249, 250, 1);
+  }
+  .minimize_button:hover {
+    background-color: rgba(248, 249, 250, 1);
+  }
+  
