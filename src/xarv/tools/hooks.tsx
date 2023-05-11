@@ -1,5 +1,5 @@
-import { DependencyList, useEffect, EventHandler, MutableRefObject, useState, useCallback } from "react"
-import { DragmovementCallback, IDragPoint, IPoint } from "./types"
+import { DependencyList, useEffect, MutableRefObject, useState, useCallback } from "react"
+import { DragmovementCallback, IDragPoint } from "./types"
 import { MakePointInRect } from "./tools"
 
 type WindowEventListener<K extends keyof WindowEventMap> = (this: Window, ev: WindowEventMap[K]) => any
@@ -91,4 +91,34 @@ export function useStorage(key: string, defaultValue: any, storageObject: Storag
   }, [])
 
   return [value, setValue, remove]
+}
+
+export function useImport<
+  ModuleType extends { default: any }, 
+  ModFunc extends (_: ModuleType) => any = (m: ModuleType) => ModuleType, 
+  ModResult = ReturnType<ModFunc>
+>
+  (impprom: Promise<ModuleType>, mod: ModFunc = ((m: ModuleType) => m) as any): ModResult | null { 
+  const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
+
+  useEffect(() => { impprom.then(module => {
+    setModuleMod(mod(module))
+  }) }, [impprom, mod])
+
+  return module_mod
+}
+
+export function useImportDefault<
+  ModuleType extends { default: any }, 
+  ModFunc extends (_: ModuleType) => any = (m: ModuleType) => ModuleType['default'], 
+  ModResult = ReturnType<ModFunc>
+>
+  (impprom: Promise<ModuleType>, mod: ModFunc = ((m: ModuleType) => m.default) as any): ModResult | null { 
+  const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
+
+  useEffect(() => { impprom.then(module => {
+    setModuleMod(mod(module))
+  }) }, [impprom, mod])
+
+  return module_mod
 }
