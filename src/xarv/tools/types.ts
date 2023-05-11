@@ -1,3 +1,5 @@
+import { NullLiteral } from "typescript"
+
 export interface IDragPoint{
     offsetLeft: number
     offsetTop: number
@@ -24,3 +26,8 @@ export interface IRect{
 }
 
 export type DragmovementCallback = (pos: IPoint) => void
+
+export type HavePrototype = { prototype: any }
+export type HaveDefault = { default: any }
+export type ClassPrototype<Class extends (HavePrototype | null | undefined)> = NonNullable<Class>['prototype']
+export type ModuleFunction<ModuleType> = (module: ModuleType) => any

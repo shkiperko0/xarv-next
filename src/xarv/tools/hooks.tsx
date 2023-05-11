@@ -1,5 +1,5 @@
 import { DependencyList, useEffect, MutableRefObject, useState, useCallback } from "react"
-import { DragmovementCallback, IDragPoint } from "./types"
+import { DragmovementCallback, HaveDefault, IDragPoint, ModuleFunction } from "./types"
 import { MakePointInRect } from "./tools"
 
 type WindowEventListener<K extends keyof WindowEventMap> = (this: Window, ev: WindowEventMap[K]) => any
@@ -93,32 +93,18 @@ export function useStorage(key: string, defaultValue: any, storageObject: Storag
   return [value, setValue, remove]
 }
 
-export function useImport<
-  ModuleType extends { default: any }, 
-  ModFunc extends (_: ModuleType) => any = (m: ModuleType) => ModuleType, 
-  ModResult = ReturnType<ModFunc>
->
-  (impprom: Promise<ModuleType>, mod: ModFunc = ((m: ModuleType) => m) as any): ModResult | null { 
-  const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
-
-  useEffect(() => { impprom.then(module => {
-    setModuleMod(() => mod(module))
-  }) }, [impprom, mod])
-
-  return module_mod
+export function useImport<ModuleType extends HaveDefault>(__import: Promise<ModuleType>) { 
+  return useImportEx(__import, m => m)
 }
 
-export function useImportDefault<
-  ModuleType extends { default: any }, 
-  ModFunc extends (_: ModuleType) => any = (m: ModuleType) => ModuleType['default'], 
-  ModResult = ReturnType<ModFunc>
->
-  (impprom: Promise<ModuleType>, mod: ModFunc = ((m: ModuleType) => m.default) as any): ModResult | null { 
-  const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
+export function useImportDefault<ModuleType extends HaveDefault>(__import: Promise<ModuleType>) { 
+  return useImportEx(__import, m => m.default)
+}
 
-  useEffect(() => { impprom.then(module => {
-    setModuleMod(() => mod(module))
-  }) }, [impprom, mod])
-
-  return module_mod
+export function useImportEx<ModuleType extends HaveDefault, ModFunc extends ModuleFunction<ModuleType>, ModResult = ReturnType<ModFunc>>(__import: Promise<ModuleType>, mod: ModFunc): ModResult | null { 
+  const [ moddedModule, setModdedModule ] = useState<ModResult | null>(null)
+  useEffect(() => { __import.then(module => {
+    setModdedModule(() => mod(module))
+  }) }, [__import, mod])
+  return moddedModule
 }
