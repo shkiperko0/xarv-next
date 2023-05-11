@@ -3,7 +3,7 @@ import { Template_Article } from './templates/article'
 
 const templateListRegister = {
     article: Template_Article,
-    dummy: (props: IPostProps) => <></>,
+    dummy: () => <></>,
 } 
 
 export type TTempalteListType = { [name: string]: TPostRenderFunction<any> }

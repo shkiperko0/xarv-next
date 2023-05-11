@@ -102,7 +102,7 @@ export function useImport<
   const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
 
   useEffect(() => { impprom.then(module => {
-    setModuleMod(mod(module))
+    setModuleMod(() => mod(module))
   }) }, [impprom, mod])
 
   return module_mod
@@ -117,7 +117,7 @@ export function useImportDefault<
   const [ module_mod, setModuleMod ] = useState<ModResult | null>(null)
 
   useEffect(() => { impprom.then(module => {
-    setModuleMod(mod(module))
+    setModuleMod(() => mod(module))
   }) }, [impprom, mod])
 
   return module_mod
