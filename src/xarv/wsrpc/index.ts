@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createEventer } from "../eventer";
 
 type FieldNameType = string | number | symbol
@@ -13,7 +14,7 @@ type RPCs<A extends W> = {
   [K in keyof A]: (...args: ReturnType<A[K]>) => void
 }
 
-class WSRPCClient<
+class Client<
   RType extends Handlers,
   EType extends Events
 >{
@@ -35,7 +36,7 @@ class WSRPCClient<
 
   private onMessage(msg: MessageEvent<any>) {
     type EventMessage = [string, any]
-    type RPCMessage = [number, any, number | undefined]
+    type RPCMessage = [number, any, number | undefined | string]
     type MessageType = EventMessage | RPCMessage
 
     const response = JSON.parse(msg.data) as MessageType;
@@ -47,13 +48,18 @@ class WSRPCClient<
         console.log("unsubscribed #depredecated", status, data, index);
         return;
       }
-
+      
       const callback = this.callback_list[index]
-      const rpcname = this.callback_names_list[index]
+      let rpcname = this.callback_names_list[index]
+
+      if (typeof index === 'string') {
+        rpcname = index
+        console.log("fake message", index, status, data);
+      }
 
       if (callback) {
         callback(...[status, data] as any);
-        this.unsubscribe(index);
+        if(typeof index == 'number') this.unsubscribe(index);
       }
 
       if (rpcname) {
@@ -112,6 +118,15 @@ class WSRPCClient<
     this.await_list = [];
   }
 
+  fake_rpc<Key extends keyof RType>(name: Key, data: ReturnType<RType[Key]>){
+    const [status, ...other] = data
+    this.onMessage({ data: JSON.stringify([status, other, name]) } as any)
+  }
+
+  fake_event<Key extends keyof EType>(name: Key, data: Parameters<EType[Key]>){
+    this.onMessage({ data: JSON.stringify([name, data]) } as any)
+  }
+
   send<
     Key extends keyof RType,
     Data extends Parameters<RType[Key]>,
@@ -147,4 +162,19 @@ class WSRPCClient<
   }
 }
 
-export function createClient<RType extends Handlers, EType extends Events>(url: string){ return new WSRPCClient<RType, EType>(url) }
+export function createClient<RType extends Handlers, EType extends Events>(url: string){ return new Client<RType, EType>(url) }
+
+
+export const useWSC_RPC = <RType extends Handlers, K extends keyof RType>(client: Client<RType, {}>, rpc: K, callback: RPCs<RType>[K]) => {
+  useEffect(() => {    
+      client.eventer_rpc.subscribe(rpc, callback)
+      return () => client.eventer_rpc.unsubscribe(rpc, callback)
+  }, [client, rpc, callback])
+}
+
+export const useWSC_Event = <EType extends Events, K extends keyof EType>(client: Client<{}, EType>, event: K, callback: EType[K]) => {
+  useEffect(() => {    
+    client.eventer_events.subscribe(event, callback)
+    return () => client.eventer_events.unsubscribe(event, callback)
+}, [client, event, callback])
+}

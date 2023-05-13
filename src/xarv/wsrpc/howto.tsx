@@ -1,4 +1,5 @@
-import { createClient } from '.'
+import { useState } from 'react'
+import { createClient, useWSC_Event, useWSC_RPC } from '.'
 
 // описание функций которые вызыввает клиент для исполнения на сервере
 type RPC_List = { // пример удаленнывх процедур для сервера
@@ -23,3 +24,33 @@ client.eventer_rpc.subscribe('rpc_SetPlayerName', (status, old_name) => { }) // 
 
 client.eventer_events.subscribe('event_OnPlayerConnect', (player) => { }) // слушаем когда сервер говорит что игрок подключился
 client.eventer_events.subscribe('event_OnPlayerDisconnect', (reason, player_id) => { }) // слушаем когда сервер говорит что игрок отключился
+
+const ComponentA = () => {
+    const [count, setCount] = useState(0)
+    useWSC_RPC(client, 'rpc_GetPlayerName', (status, name) => alert(`Name changed to ${name}`))
+    useWSC_Event(client, 'event_OnPlayerConnect', (status) => setCount(count => count + 1))
+    useWSC_Event(client, 'event_OnPlayerDisconnect', (reason, status) => setCount(count => count - 1))
+
+    return <>
+        Players {count}
+        <br />
+    </>
+}
+
+const ComponentB = () => {
+    return <>
+        <button type='button' onClick={() => client.fake_event('event_OnPlayerConnect', [0])}> Add player </button>
+        <br />
+        <button type='button' onClick={() => client.fake_event('event_OnPlayerDisconnect', ['powel nahoy', 0])}> Remove player </button>
+        <br />
+        <button type='button' onClick={() => client.fake_rpc('rpc_GetPlayerName', [200, 'uebak'])}> Get player </button>
+        <br />
+    </>
+}
+
+export const WSRpcTestGUI = () => {
+    return <>
+        <ComponentA/>
+        <ComponentB/>
+    </>
+}
