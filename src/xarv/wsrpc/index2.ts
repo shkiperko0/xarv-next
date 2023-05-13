@@ -3,27 +3,31 @@ import { createEventer } from "../eventer";
 
 type FieldNameType = string | number | symbol
 
-type Handlers<T extends FieldNameType = any, R extends Array<any> = Array<any>> = Record<T, (...args: any) => R>
-type Events<T extends FieldNameType = any> = Record<T, (...args: any) => void>
+type RPC_Handlers<T extends FieldNameType = any> = Record<T, { send?: any, recv?: any }>
+type Event_Handlers<T extends FieldNameType = any> = Record<T, (...args: any) => void>
 
-type W = {
-  [name: FieldNameType]: (...args: any[]) => any[]
-}
-
-type RPCs<A extends W> = {
-  [K in keyof A]: (...args: ReturnType<A[K]>) => void
+type IClient<
+  RType extends RPC_Handlers,
+  EType extends Event_Handlers
+> = {
+  callback_list: Record<FieldNameType, (...args: RType[keyof RType]['recv'] ) => void>
+  callback_names_list: Record<FieldNameType, FieldNameType>
+  rtype: {
+    [name in keyof RType]: (...args: RType[name]['recv']) => void
+  }
 }
 
 class Client<
-  RType extends Handlers,
-  EType extends Events
+  RType extends RPC_Handlers,
+  EType extends Event_Handlers,
+  CL extends IClient<RType, EType> = IClient<RType, EType>
 >{
   is_connected: boolean = false
   await_list: string[] = []
-  callback_list: Record<string, (...args: ReturnType<RType[keyof RType]>) => void> = {}
-  callback_names_list: Record<string, FieldNameType> = {}
+  callback_list: CL['callback_list'] = {}
+  callback_names_list: CL['callback_names_list'] = {}
   next_callback_index: number = 0
-  eventer_rpc = createEventer<RPCs<RType>>()
+  eventer_rpc = createEventer<CL['rtype']>()
   eventer_events = createEventer<EType>()
 
   url: string
@@ -119,7 +123,7 @@ class Client<
     this.await_list = [];
   }
 
-  fake_rpc<Key extends keyof RType>(name: Key, data: ReturnType<RType[Key]>){
+  fake_rpc<Key extends keyof RType>(name: Key, data: RType[Key]['recv']){
     const [status, ...other] = data
     this.onMessage({ data: JSON.stringify([status, other, name]) } as any)
   }
@@ -130,8 +134,8 @@ class Client<
 
   send<
     Key extends keyof RType,
-    Data extends Parameters<RType[Key]>,
-    Callback extends (...args: ReturnType<RType[Key]>) => void
+    Data extends RType[Key]['send'],
+    Callback extends (...args: RType[Key]['recv']) => void
   >(name: Key, data: Data, callback?: Callback): number | void {
     const current_index = (this.next_callback_index++);
     const message = JSON.stringify([name, data, current_index]);
@@ -151,9 +155,9 @@ class Client<
 
   send_promised<
     Key extends keyof RType,
-    Data extends Parameters<RType[Key]>
+    Data extends RType[Key]['send']
   >(name: Key, data: Data) {
-    return new Promise<ReturnType<RType[Key]>>((resolve, reject) => {
+    return new Promise<RType[Key]['recv']>((resolve, reject) => {
       try {
         this.send(name, data, (...params) => resolve(params))
       } catch (error) {
@@ -163,17 +167,17 @@ class Client<
   }
 }
 
-export function createClient<RType extends Handlers, EType extends Events>(url: string){ return new Client<RType, EType>(url) }
+export function createClient<RType extends RPC_Handlers, EType extends Event_Handlers>(url: string){ return new Client<RType, EType>(url) }
 
 
-export const useWSC_RPC = <RType extends Handlers, K extends keyof RType>(client: Client<RType, {}>, rpc: K, callback: RPCs<RType>[K]) => {
+export const useWSC_RPC = <RType extends RPC_Handlers, K extends keyof RType>(client: Client<RType, {}>, rpc: K, callback: (...args: RType[K]['recv']) => void ) => {
   useEffect(() => {    
       client.eventer_rpc.subscribe(rpc, callback)
       return () => client.eventer_rpc.unsubscribe(rpc, callback)
   }, [client, rpc, callback])
 }
 
-export const useWSC_Event = <EType extends Events, K extends keyof EType>(client: Client<{}, EType>, event: K, callback: EType[K]) => {
+export const useWSC_Event = <EType extends Event_Handlers, K extends keyof EType>(client: Client<{}, EType>, event: K, callback: EType[K]) => {
   useEffect(() => {    
     client.eventer_events.subscribe(event, callback)
     return () => client.eventer_events.unsubscribe(event, callback)
