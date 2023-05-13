@@ -1,5 +1,7 @@
-import { cl } from 'src/tools/tools';
-import styles from './windowmanager.module.scss';
+import { createEventer } from '../eventer';
+import { useWindowEvent } from '../tools/hooks';
+import { cl } from '../tools/tools';
+import styles from './windowmanager.module.scss'
 
 import { 
   ReactNode, 
@@ -12,12 +14,6 @@ import {
   useEffect
 } from 'react';
 
-import { Tabs } from '@mantine/core';
-import { LeftSide, RightSide, SidedDiv } from '@components/gui/Bars';
-import { Button } from '@components/gui/Button';
-import { Buttons } from '@components/gui/Buttons';
-import { createEventer, useEventer } from 'src/tools/subscriber';
-import { useWindowEvent } from 'src/tools/hooks';
 
 let window_id = 0;
 const NewWindowID = () => (window_id++)
@@ -61,11 +57,11 @@ interface ITaskProps{
 
 const Task = (props: ITaskProps) => {
     const { data: { options: { title }, id } } = props
-    return <Tabs.Tab value={id!.toString()}>
+    return <div>
         {/* <div className={styles.task}> */}
             { title }
         {/* </div> */}
-    </Tabs.Tab>
+    </div>
 }
 
 interface IWindowProps{
@@ -180,17 +176,17 @@ export const Window = (props: IWindowProps) => {
                     }
                 }}
             >
-                <SidedDiv>
-                    <LeftSide><span title={`Window #${props.data.id}`}>{options.title}</span></LeftSide>
-                    <RightSide>
-                        <Buttons>
-                            <Button className={styles.close_button} onClick={(event) => { 
+                <div>
+                    <div><span title={`Window #${props.data.id}`}>{options.title}</span></div>
+                    <div>
+                        <div>
+                            <button type='button' className={styles.close_button} onClick={(event) => { 
                                 close(props.data.id) 
                                 props.data.options.onClose && props.data.options.onClose(event)
                             }}/>
-                        </Buttons>
-                    </RightSide>
-                </SidedDiv>    
+                        </div>
+                    </div>
+                </div>    
             </div> 
             <div 
                 className={styles.windowcontent} 
@@ -234,13 +230,9 @@ export const Tasks = () => {
     const lastWindow = windows.findLast(w => w.id !== undefined)
     const defaultValue = lastWindow?.id?.toString()
 
-    return <Tabs defaultValue={defaultValue} color={'dark'} variant={'pills'}>
-        <Tabs.List>
-            {/* <div className={styles.windows}> */}
-                { windows.map((window) => <Task key={window.id} data={window}/>) }
-            {/* </div> */}
-        </Tabs.List>
-    </Tabs>
+    return <div defaultValue={defaultValue} color={'dark'}>
+        { windows.map((window) => <Task key={window.id} data={window}/>) }
+    </div>
 }
 
 const TestEventer = createEventer<{

@@ -31,3 +31,4 @@ export type HavePrototype = { prototype: any }
 export type HaveDefault = { default: any }
 export type ClassPrototype<Class extends (HavePrototype | null | undefined)> = NonNullable<Class>['prototype']
 export type ModuleFunction<ModuleType> = (module: ModuleType) => any
+

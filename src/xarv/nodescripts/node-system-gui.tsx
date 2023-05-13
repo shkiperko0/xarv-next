@@ -1,5 +1,5 @@
 
-import { createEventer, useEventer } from 'xarv/eventer/eventer'
+import { createEventer, useEventer } from 'src/xarv/eventer'
 import { IScript, IConnection, IScriptNode, ScriptState, CTestNodeField, CFunctionNode, CTestNode, CScriptNode, CScriptNode_DisplaySettings } from './node-system'
 import style from './node-system-gui.module.scss'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react'
