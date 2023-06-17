@@ -1,0 +1,43 @@
+.windowWrapper {
+  color: black;
+  pointer-events: all;
+  overflow: hidden;
+}
+
+.windowCaption {
+  color: white;
+
+  padding: 10px;
+  background-color: rgb(67, 63, 71);
+
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.windowTask{
+  background-color: rgb(94, 94, 94);
+  box-shadow: 0 0 10px -1px black;
+}
+
+.windowContent {
+  height: 100%;
+  background-color: rgb(255, 255, 255);
+}
+
+.tasksBar {
+  pointer-events: all;
+  position: static;
+}
+
+.windowsHolder {
+  position: static;
+  height: 100vh;
+  width: 100vw;
+  pointer-events: none;
+
+  z-index: var(--z--windows);
+  overflow: hidden;
+
+  align-items: center;
+  justify-content: center;
+}
