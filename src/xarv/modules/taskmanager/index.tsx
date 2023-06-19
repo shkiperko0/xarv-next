@@ -2,7 +2,7 @@ import { RefObject, createContext, useContext, useRef, useState } from 'react';
 import { ChildrenProp } from 'src/xarv/plain/react';
 import styles from './styles.module.scss';
 import { useDragMovement } from 'src/xarv/hooks';
-import { ItemInnerBounder, RefDragAllower } from 'src/xarv/hooks/useDragMovement';
+import { ItemInnerBounder, NonControllDragAllower, RefDragAllower } from 'src/xarv/hooks/useDragMovement';
 export { styles as taskmanagerStyles };
 
 let window_id = 0;
@@ -142,7 +142,7 @@ function WindowMapper({ holder, window }: IWindowPropsInternal & { holder: RefOb
       window.y = pos.y
     },
     bounder: ItemInnerBounder(holder, wrappeRef),
-    allowHandler: RefDragAllower(captionRef)
+    allowHandler: NonControllDragAllower //RefDragAllower(captionRef)
   })
 
   return <div ref={wrappeRef} style={{ left: x, top: y, position: 'absolute' }}> 

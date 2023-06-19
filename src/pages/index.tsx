@@ -17,11 +17,11 @@ export default function IndexPage(){
         title: 'Window title',
 
         // Caption({window: { title }}){ 
-        //   return <>Caption of {title}</>
+        //   return <>Custom caption of {title}</>
         // },
 
         // Task({window: { title }}){ 
-        //   return <>Task of {title}</>
+        //   return <>Custom task of {title}</>
         // },
 
         Render: ({window}) => {
