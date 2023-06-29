@@ -33,16 +33,16 @@ export const useScriptEditor = () => useContext(ScriptEditorContext)
 
 interface GUI_ScriptEditorProps {
 	enablePallete?: true
-	windowed?: true
+	windowedPallete?: true
 	script?: CScript
 }
 
-export function GUI_ScriptEditor({ enablePallete, script, windowed }: GUI_ScriptEditorProps) {
+export function GUI_ScriptEditor({ enablePallete, script, windowedPallete }: GUI_ScriptEditorProps) {
 	const editor = useScriptEditorCore({script})
 	const windows = useWindows()
 
 	useEffect(() => {
-		if(windowed && enablePallete){
+		if(windowedPallete && enablePallete){
 			const id = windows.open({
 				title: 'Node pallete',
 				Render: () => <>
@@ -57,12 +57,12 @@ export function GUI_ScriptEditor({ enablePallete, script, windowed }: GUI_Script
 		}
 
 		return
-	}, [windowed, enablePallete])
+	}, [windowedPallete, enablePallete])
 
 
 	return <ScriptEditorContext.Provider value={editor}>
 		<div className={styles.scriptEditor}>
-			{(enablePallete && !windowed) && <><span>Pallete</span><GUI_NodePallete ref={editor.pelleteRef} /> </>}
+			{(enablePallete && !windowedPallete) && <><span>Pallete</span><GUI_NodePallete ref={editor.pelleteRef} /> </>}
 			<GUI_ScriptFrame ref={editor.frameRef} script={script} />
 		</div>
 	</ScriptEditorContext.Provider>

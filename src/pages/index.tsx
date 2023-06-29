@@ -29,7 +29,7 @@ export default function IndexPage(){
 		<Head>
 			<title>{title}</title>
 		</Head>
-    <Button onClick={onClick}>Open window</Button>
+    <button onClick={onClick}>Open window</button>
     <ScriptTestComponent/>
 	</>
 }

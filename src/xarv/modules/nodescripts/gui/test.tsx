@@ -23,5 +23,18 @@ script.AddNode([node, node1, node2, node3, node4, add_node, div_node, mul_node, 
 script.start = node;
 
 export const ScriptTestComponent = () => {
-	return <GUI_ScriptEditor enablePallete windowed script={script} />
+	const [windowedPallete, toggle_windowedPallete] = useState<true>()
+	const [enablePallete, toggle_enablePallete] = useState<true>()
+
+	return <>
+		<button onClick={() => toggle_windowedPallete(e => e === true ? undefined : true) }>
+			windowedPallete {windowedPallete ? 'enabled' : 'disabled'}
+		</button>
+
+		<button onClick={() => toggle_enablePallete(e => e === true ? undefined : true) }>
+			enablePallete {enablePallete ? 'enabled' : 'disabled'}
+		</button>
+		
+		<GUI_ScriptEditor enablePallete={enablePallete} windowedPallete={windowedPallete} script={script} />
+	</>
 }

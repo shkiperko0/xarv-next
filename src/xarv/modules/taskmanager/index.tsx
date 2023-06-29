@@ -2,7 +2,7 @@ import { RefObject, createContext, useContext, useRef, useState } from 'react';
 import { ChildrenProp } from 'src/xarv/plain/react';
 import styles from './styles.module.scss';
 import { useDragMovement } from 'src/xarv/hooks';
-import { ItemInnerBounder, NonControllDragAllower, RefDragAllower } from 'src/xarv/hooks/useDragMovement';
+import { ItemInnerBounder, NonControllDragAllower } from 'src/xarv/hooks/useDragMovement';
 export { styles as taskmanagerStyles };
 
 let window_id = 0;
