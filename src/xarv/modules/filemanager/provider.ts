@@ -1,6 +1,5 @@
 import { Header_Auth, Header_Auth_JSON } from "src/xarv/plain/utils";
 import { IFile } from "./types";
-import statics from "src/statics";
 
 export const getRelativeFullPath = ({ path, name }: Pick<IFile, 'name' | 'path'>) => {
 	return path == "/" ? path + name : path + "/" + name;

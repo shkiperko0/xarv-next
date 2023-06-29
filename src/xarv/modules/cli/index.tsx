@@ -1,7 +1,8 @@
 import { useRef, useState } from "react"
-import styles from "./cli.module.scss"
+import styles from "./styles.module.scss"
 import { useWebsocket } from "../../hooks/useWebsocket"
 import { Button } from "src/xarv/components/button"
+export { styles as CLIStyles }
 
 // const openBuilderCLI = () => {
 //     windows.open(<BuilderCLI url={'ws://127.0.0.1:8080/ws'}/>, {

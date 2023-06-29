@@ -26,7 +26,10 @@ export const GUI_ScriptFrame = forwardRefObject<HTMLDivElement, GUI_ScriptFrameP
 					offsetX: pos.x,
 				})
 			},
-			bounder: ItemOuterBounder(holderRef, frameRef)
+			bounder: ItemOuterBounder(holderRef, frameRef),
+			allowHandler(element) {
+				return element === frameRef.current
+			},
 		})
 
 		const style: CSSProperties = {
