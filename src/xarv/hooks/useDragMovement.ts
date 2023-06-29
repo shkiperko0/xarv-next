@@ -1,7 +1,6 @@
 import { useState, RefObject } from 'react'
 import { IPoint, IRect } from '../plain/types'
 import { useHtmlElementEvent, useWindowEvent } from '.'
-import { MakePointInRect } from '../plain/utils'
 
 export interface IDragPoint{
     offsetLeft: number
@@ -44,13 +43,8 @@ export function ItemInnerBounder(bounder: RefObject<HTMLElement>, item: RefObjec
       const hr = bounder.current.getBoundingClientRect()
       const fr = frame.current.getBoundingClientRect()
       return { 
-        x: (fr.width > hr.width) ? 
-            (x > 0 ? 0 : x < -(fr.width - hr.width) ? -(fr.width - hr.width) : x) :
-            (x < 0 ? 0 : (x + fr.width) > hr.width ? (hr.width - fr.width) : x)
-        ,
-        y: (fr.height > hr.height) ? 
-            (y > 0 ? 0 : y < -(fr.height - hr.height) ? -(fr.height - hr.height) : y) :
-            (y < 0 ? 0 : (y + fr.height) > hr.height ? (hr.height - fr.height) : y),
+        x: (fr.width  > hr.width)  ? (x > 0 ? 0 : x < -(fr.width  - hr.width) ?  -(fr.width  - hr.width)  : x) : (x < 0 ? 0 : (x + fr.width)  > hr.width  ? (hr.width  - fr.width)  : x),
+        y: (fr.height > hr.height) ? (y > 0 ? 0 : y < -(fr.height - hr.height) ? -(fr.height - hr.height) : y) : (y < 0 ? 0 : (y + fr.height) > hr.height ? (hr.height - fr.height) : y),
       }
     } else {
         return { x, y }
