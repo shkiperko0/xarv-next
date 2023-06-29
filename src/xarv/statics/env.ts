@@ -1,13 +1,25 @@
-import { defaultEnvironmentType, environmentTypes } from "./constants"
+import { EnvironmentType, defaultEnvironmentType, environmentTypes } from "./constants"
 
 const GetEnv = <Type>(value: Type | undefined, callback: (value?: Type) => Type | undefined) => {
     return callback(value)
 }
 
 export const env = {
-    mode: GetEnv(process.env.NODE_ENV, (mode) => {
+    node_mode: GetEnv(process.env.NODE_ENV, (mode) => {
         if(mode === undefined){
             console.warn(`environment variable 'NODE_ENV' is not set, so '${defaultEnvironmentType}' used as default`)
+            return defaultEnvironmentType
+        }
+        else if(environmentTypes.indexOf(mode) == -1){ 
+            console.warn(`invalid environment type '${mode}', also '${defaultEnvironmentType}' used as default`)
+            return defaultEnvironmentType
+        }
+        return mode
+    }),
+
+    mode: GetEnv(process.env.NEXT_PUBLIC_MODE as EnvironmentType, (mode) => {
+        if(mode === undefined){
+            console.warn(`environment variable 'NEXT_PUBLIC_MODE' is not set, so '${defaultEnvironmentType}' used as default`)
             return defaultEnvironmentType
         }
         else if(environmentTypes.indexOf(mode) == -1){ 

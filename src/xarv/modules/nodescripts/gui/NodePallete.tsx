@@ -21,7 +21,6 @@ export const GUI_NodePallete = forwardRefObject<HTMLDivElement, GUI_NodePalleteP
         const row = useMemo(() => nodePallete.map(constructor => ([new constructor, constructor] as [CScriptNode, typeof CScriptNode])), [])
 
         return <div ref={ref} className={styles.nodePallete}>
-            <span>Pallete</span>
             {
                 row.map(
                     ([node, constructor]) => <GUI_ScriptNode_PaletePlaceholder

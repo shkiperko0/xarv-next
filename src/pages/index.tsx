@@ -4,7 +4,7 @@ import Head from "next/head";
 import { MouseEventHandler } from "react";
 import { Button } from "src/xarv/components/button";
 import { ScriptTestComponent } from "src/xarv/modules/nodescripts/gui/test";
-import { IWindowProps, useWindows } from "src/xarv/modules/taskmanager";
+import { useWindows } from "src/xarv/modules/taskmanager";
 import { statics } from "src/xarv/statics";
 
 export default function IndexPage(){
@@ -23,9 +23,11 @@ export default function IndexPage(){
     })
   }
 
+  const title = ['Ugh, yeah', statics.env.mode].join(' ')
+
 	return <>
 		<Head>
-			<title>Ugh, yeah {statics.env.mode}</title>
+			<title>{title}</title>
 		</Head>
     <Button onClick={onClick}>Open window</Button>
     <ScriptTestComponent/>

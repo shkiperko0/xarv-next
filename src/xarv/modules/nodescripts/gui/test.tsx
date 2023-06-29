@@ -23,5 +23,5 @@ script.AddNode([node, node1, node2, node3, node4, add_node, div_node, mul_node, 
 script.start = node;
 
 export const ScriptTestComponent = () => {
-	return <GUI_ScriptEditor enablePallete script={script} />
+	return <GUI_ScriptEditor enablePallete windowed script={script} />
 }

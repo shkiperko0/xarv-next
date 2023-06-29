@@ -64,7 +64,7 @@ export interface IWindowOpenOptions{
 }
 
 export interface IWindowsCore{  
-  open: (options: IWindowOpenOptions) => void;
+  open: (options: IWindowOpenOptions) => number;
   close: (id: number) => void;
   list: IWindow[]; 
 }
@@ -106,7 +106,8 @@ export function useWindowsCore(): IWindowsCoreInternal {
       y: 0,
       mode: 'normal'
     }
-    return setList(list => [...list, window])
+    setList(list => [...list, window])
+    return id
   }
 
   return {
