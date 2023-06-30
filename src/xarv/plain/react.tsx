@@ -1,13 +1,7 @@
 import { Attributes, ForwardRefExoticComponent, PropsWithoutRef, ReactElement, ReactNode, RefObject, forwardRef } from "react";
-
-export interface ChildrenProp{
-    children?: ReactNode
-}
-
 interface RefObjectAttributes<T> extends Attributes {
 	ref?: RefObject<T>;
 }
-
 interface ForwardRefObjectRenderFunction<T, P = {}> {
 	(props: P, ref: RefObject<T>): ReactElement | null;
 	displayName?: string;

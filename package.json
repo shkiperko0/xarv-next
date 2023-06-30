@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mantine/core": "^6.0.15",
     "next": "^13.4.7",
     "sass": "^1.63.6",
     "typescript": "^5.1.6"

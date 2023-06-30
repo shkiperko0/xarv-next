@@ -49,3 +49,56 @@
   align-items: center;
   justify-content: center;
 }
+
+.lrbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  > * {
+    text-overflow: clip;
+    overflow: hidden;
+  }
+
+  > .left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  > .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+
+.fullScreen_button {
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  background-color: rgba(248, 249, 250, 0);
+  border: none;
+}
+
+.minimize_button {
+  background-color: rgba(248, 249, 250, 0);
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+}
+
+.close_button:hover {
+  background-color: #ef4444;
+  color: #fef2f2;
+}
+
+.fullScreen_button:hover {
+  background-color: rgba(248, 249, 250, 1);
+}
+
+.minimize_button:hover {
+  background-color: rgba(248, 249, 250, 1);
+}
