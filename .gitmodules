@@ -1,0 +1,3 @@
+[submodule "shared"]
+	path = shared
+	url = https://gitlab.com/eam-corporation/eam-shared-toolkit-web
