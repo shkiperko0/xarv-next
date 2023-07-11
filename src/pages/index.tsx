@@ -1,11 +1,8 @@
-// import { EventerTestGUI } from "src/xarv/eventer/howto"
-// import { WSRpcTestGUI } from "src/xarv/wsrpc/howto"
 import Head from "next/head";
 import { MouseEventHandler } from "react";
-import { Button } from "src/xarv/components/button";
-import { ScriptTestComponent } from "src/xarv/modules/nodescripts/gui/test";
-import { useWindows } from "src/xarv/modules/taskmanager";
-import { statics } from "src/xarv/statics";
+import { ScriptTestComponent } from "shared/xarv/modules/nodescripts/gui/test";
+import { useWindows } from 'shared/xarv/modules/taskmanager'
+import { statics } from "src/statics";
 
 export default function IndexPage(){
   const windows = useWindows()
@@ -23,7 +20,7 @@ export default function IndexPage(){
     })
   }
 
-  const title = ['Ugh, yeah', statics.env.mode].join(' ')
+  const title = ['Ugh, yeah', statics.mode].join(' ')
 
 	return <>
 		<Head>

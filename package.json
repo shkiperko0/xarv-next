@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 8085",
+    "dev": "next dev -p 8085",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@mantine/core": "^6.0.15",
+    "@mantine/core": "^6.0.16",
     "next": "^13.4.7",
     "sass": "^1.63.6",
     "typescript": "^5.1.6"

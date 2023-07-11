@@ -1,10 +1,15 @@
-import { EnvironmentType, defaultEnvironmentType, environmentTypes } from "./constants"
+import { SharedStatics } from "shared/common/types/statics"
 
 const GetEnv = <Type>(value: Type | undefined, callback: (value?: Type) => Type | undefined) => {
     return callback(value)
 }
 
-export const env = {
+type EnvironmentType = typeof process.env.NODE_ENV
+
+const environmentTypes: EnvironmentType[] = ['development', 'production', 'test']
+const defaultEnvironmentType: EnvironmentType = 'development'
+
+export const statics = {
     node_mode: GetEnv(process.env.NODE_ENV, (mode) => {
         if(mode === undefined){
             console.warn(`environment variable 'NODE_ENV' is not set, so '${defaultEnvironmentType}' used as default`)
@@ -34,5 +39,12 @@ export const env = {
             if(host === undefined) console.error(`environment variable 'NEXT_PUBLIC_GATE_HOST' is not set, so api calls will not work`)
             return host
         }),
+    }
+}
+
+export const shared_statics: SharedStatics = {
+    AuthTokenNames: {
+        accessToken: 'accessToken',
+        refreshToken: 'refreshToken' 
     }
 }
